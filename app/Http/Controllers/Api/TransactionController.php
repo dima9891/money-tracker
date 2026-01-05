@@ -64,6 +64,7 @@ class TransactionController extends Controller
 
     public function list()
     {
-        return 'working';
+        $transactions = Transaction::with('categories')->get();
+        return response()->json($transactions, 200);
     }
 }
