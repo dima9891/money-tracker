@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('name');
             $table->bigInteger('amount');
             $table->string('currency', 3)->default('RUB');
