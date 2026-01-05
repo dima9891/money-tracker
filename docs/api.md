@@ -4,8 +4,7 @@
 
 ### Создать
 
-POST запрос на эндпоинт api/transactions/create
-в формате JSON:
+POST запрос на эндпоинт ``api/transactions/create`` в формате JSON:
 
 ```json
 [
@@ -36,4 +35,4 @@ POST запрос на эндпоинт api/transactions/create
 
 ### Просмотреть
 
-POST запрос на эндпоинт api/transactions/list
+POST запрос на эндпоинт ``api/transactions/list``
