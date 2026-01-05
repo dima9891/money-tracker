@@ -18,7 +18,7 @@ class TransactionController extends Controller
             '*' => ['required', 'array'],
             '*.date' => ['required', 'string'],
             '*.name' => ['required', 'string'],
-            '*.amount' => ['required', 'numeric'],
+            '*.amount' => ['required', 'string'],
             '*.category' => ['nullable', 'array'],
             '*.category.*' => ['integer'],
         ]);
@@ -34,7 +34,7 @@ class TransactionController extends Controller
                 $date = Carbon::createFromFormat('d.m.Y H:i:s', $item['date']);
 
                 $money = new Money(
-                    (int) bcmul((string) $item['amount'], '100'),
+                    (int) bcmul($item['amount'], '100'),
                     new Currency('RUB')
                 );
 
