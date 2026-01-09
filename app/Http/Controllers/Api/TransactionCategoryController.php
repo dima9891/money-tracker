@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\Models\TransactionCategory;
 
 class TransactionCategoryController extends Controller
@@ -26,7 +27,38 @@ class TransactionCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = $request->validate([
+                'categories' => ['required', 'array', 'min:1'],
+                'categories.*' => ['required', 'string', 'min:1', 'max:255'],
+            ]);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+
+        $created = [];
+
+        DB::transaction(function () use ($data, &$created) {
+            foreach ($data['categories'] as $name) {
+                $category = TransactionCategory::firstOrCreate(
+                    ['name' => $name]
+                );
+
+                if ($category->wasRecentlyCreated) {
+                    $created[] = $category;
+                }
+            }
+        });
+
+        return response()->json(
+            [
+                'created' => $created,
+                'total_created' => count($created),
+            ],
+            201,
+            [],
+            JSON_UNESCAPED_UNICODE
+        );
     }
 
     /**
