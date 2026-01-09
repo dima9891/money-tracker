@@ -14,14 +14,18 @@ class TransactionController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            '*' => ['required', 'array'],
-            '*.date' => ['required', 'string'],
-            '*.name' => ['required', 'string'],
-            '*.amount' => ['required', 'string'],
-            '*.category' => ['nullable', 'array'],
-            '*.category.*' => ['integer'],
-        ]);
+        try {    
+            $data = $request->validate([
+                '*' => ['required', 'array'],
+                '*.date' => ['required', 'string'],
+                '*.name' => ['required', 'string'],
+                '*.amount' => ['required', 'string'],
+                '*.category' => ['nullable', 'array'],
+                '*.category.*' => ['integer'],
+            ]);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
 
         if (count($request->all()) > 100) {
             abort(422, 'Too many transactions in one request');
