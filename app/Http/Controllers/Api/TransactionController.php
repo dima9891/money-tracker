@@ -62,9 +62,9 @@ class TransactionController extends Controller
         return response()->json($transactions, 201);
     }
 
-    public function list()
+    public function index()
     {
         $transactions = Transaction::with('categories')->get();
-        return response()->json($transactions, 200);
+        return response()->json($transactions, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }
