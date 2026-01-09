@@ -66,9 +66,25 @@ class TransactionController extends Controller
         return response()->json($transactions, 201);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::with('categories')->get();
-        return response()->json($transactions, 200, [], JSON_UNESCAPED_UNICODE);
+        $query = Transaction::with('categories');
+
+        if ($request->filled('category_id')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('transaction_categories.id', $request->integer('category_id'));
+            });
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('date', $request->date('date'));
+        }
+
+        return response()->json(
+            $query->orderBy('date', 'desc')->get(),
+            200,
+            [],
+            JSON_UNESCAPED_UNICODE
+        );
     }
 }
